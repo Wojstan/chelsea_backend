@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
+using aiproject.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace aiproject.Repositories
@@ -8,48 +9,48 @@ namespace aiproject.Repositories
         where TEntity : class, IEntity
         where TContext : DbContext
     {
-        private readonly TContext _context;
+        protected readonly TContext Context;
 
         protected BaseRepository(TContext context)
         {
-            _context = context;
+            Context = context;
         }
 
-        public async Task<TEntity> Add(TEntity entity)
+        public TEntity Add(TEntity entity)
         {
-            _context.Set<TEntity>().Add(entity);
-            await _context.SaveChangesAsync();
+            Context.Set<TEntity>().Add(entity);
+            Context.SaveChanges();
             return entity;
         }
 
-        public async Task<TEntity> Delete(int id)
+        public TEntity Delete(int id)
         {
-            var entity = await _context.Set<TEntity>().FindAsync(id);
+            var entity = Context.Set<TEntity>().Find(id);
             if (entity == null)
             {
-                return entity;
+                return null;
             }
 
-            _context.Set<TEntity>().Remove(entity);
-            await _context.SaveChangesAsync();
+            Context.Set<TEntity>().Remove(entity);
+            Context.SaveChanges();
 
             return entity;
         }
 
-        public async Task<TEntity> Get(int id)
+        public TEntity Get(int id)
         {
-            return await _context.Set<TEntity>().FindAsync(id);
+            return Context.Set<TEntity>().Find(id);
         }
 
-        public async Task<List<TEntity>> GetAll()
+        public List<TEntity> GetAll()
         {
-            return await _context.Set<TEntity>().ToListAsync();
+            return Context.Set<TEntity>().ToList();
         }
 
-        public async Task<TEntity> Update(TEntity entity)
+        public TEntity Update(TEntity entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            Context.Entry(entity).State = EntityState.Modified;
+            Context.SaveChangesAsync();
             return entity;
         }
     }

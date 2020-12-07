@@ -1,16 +1,16 @@
-﻿using aiproject.Repositories;
+﻿using System.Collections.Generic;
 
 namespace aiproject.Entities
 {
     public class MatchEntity : IEntity
     {
-        public MatchEntity(int id, int apiId)
+        public MatchEntity(int id)
         {
             Id = id;
-            ApiId = apiId;
         }
 
         public int Id { get; set; }
-        public int ApiId { get; set; }
+
+        public List<AppearanceEntity> Appearances { get; set; } = new List<AppearanceEntity>();
     }
 }
