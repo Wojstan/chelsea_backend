@@ -122,7 +122,7 @@ namespace aiproject.Migrations
                         column: x => x.AppearanceEntityId,
                         principalTable: "Appearances",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -145,7 +145,7 @@ namespace aiproject.Migrations
                         column: x => x.AppearanceEntityId,
                         principalTable: "Appearances",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Ratings_Users_UserEntityId",
                         column: x => x.UserEntityId,

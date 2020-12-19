@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
         public int Value { get; set; }
-
-        public RatingPlayerResponse RatingPlayerResponse { get; set; }
+        public int Appearance { get; set; }
+        public RatingPlayerResponse Player { get; set; }
     }
 
     public class RatingPlayerResponse

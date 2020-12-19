@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace aiproject.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class RoleController : ControllerBase
     {
 

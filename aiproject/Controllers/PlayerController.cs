@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace aiproject.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PlayerController : ControllerBase
     {
         private readonly PlayerRepository _playerRepository;

@@ -50,7 +50,7 @@ namespace aiproject.Repositories
         public TEntity Update(TEntity entity)
         {
             Context.Entry(entity).State = EntityState.Modified;
-            Context.SaveChangesAsync();
+            Context.SaveChanges();
             return entity;
         }
     }

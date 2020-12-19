@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace aiproject.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class GoalController : ControllerBase
     {
         private readonly GoalRepository _goalRepository;
@@ -29,7 +29,7 @@ namespace aiproject.Controllers
             return Ok(goals.Select(goal => new GoalResponse
             {
                 Id = goal.Id,
-                PlayerGoalResponse = new PlayerGoalResponse
+                Player = new PlayerGoalResponse
                 {
                     Id = goal.AppearanceEntity.PlayerEntity.Id,
                     Number = goal.AppearanceEntity.PlayerEntity.Number,
@@ -41,12 +41,12 @@ namespace aiproject.Controllers
         [HttpPost]
         public ActionResult<GoalResponse> AddGoal(GoalRequest goalRequest)
         {
-            var goal = new GoalEntity()
+            var goal = new GoalEntity
             {
                 AppearanceId = goalRequest.AppearanceId,
                 AppearanceEntity = _databaseContext.Set<AppearanceEntity>().Find(goalRequest.AppearanceId)
             };
-
+            
             _goalRepository.Add(goal);
 
             return Ok(_goalRepository.GetAllGoals().Where(resGoal => resGoal.Id == goal.Id)
@@ -54,14 +54,15 @@ namespace aiproject.Controllers
                     new GoalResponse
                     {
                         Id = goal.Id,
-                        PlayerGoalResponse = new PlayerGoalResponse
+                        Appearance = goal.AppearanceId,
+                        Player = new PlayerGoalResponse
                         {
                             Id = goal.AppearanceEntity.PlayerEntity.Id,
                             Number = goal.AppearanceEntity.PlayerEntity.Number,
                             Surname = goal.AppearanceEntity.PlayerEntity.Surname
                         }
                     }
-                )
+                ).ToList().First()
             );
         }
 
@@ -75,20 +76,7 @@ namespace aiproject.Controllers
                 return NotFound();
             }
 
-            return Ok(_goalRepository.GetAllGoals().Where(resGoal => resGoal.Id == goal.Id)
-                .Select(newGoal =>
-                    new GoalResponse
-                    {
-                        Id = goal.Id,
-                        PlayerGoalResponse = new PlayerGoalResponse
-                        {
-                            Id = goal.AppearanceEntity.PlayerEntity.Id,
-                            Number = goal.AppearanceEntity.PlayerEntity.Number,
-                            Surname = goal.AppearanceEntity.PlayerEntity.Surname
-                        }
-                    }
-                )
-            );
+            return Ok(goal.Id);
         }
     }
 }

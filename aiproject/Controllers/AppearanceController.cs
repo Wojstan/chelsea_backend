@@ -2,12 +2,14 @@
 using aiproject.Dto;
 using aiproject.Entities;
 using aiproject.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace aiproject.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+    [Authorize]
     public class AppearanceController : ControllerBase
     {
         private readonly AppearanceRepository _appearanceRepository;
@@ -69,7 +71,7 @@ namespace aiproject.Controllers
                 return NotFound();
             }
 
-            return appearance;
+            return Ok(appearance.Id);
         }
     }
 }

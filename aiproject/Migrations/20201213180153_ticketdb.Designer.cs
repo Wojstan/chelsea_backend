@@ -10,8 +10,8 @@ using aiproject;
 namespace aiproject.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201207134303_init")]
-    partial class init
+    [Migration("20201213180153_ticketdb")]
+    partial class ticketdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -163,6 +163,27 @@ namespace aiproject.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("aiproject.Entities.TicketEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<int>("MatchId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Row")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Seat")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tickets");
+                });
+
             modelBuilder.Entity("aiproject.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -214,7 +235,8 @@ namespace aiproject.Migrations
                 {
                     b.HasOne("aiproject.Entities.AppearanceEntity", "AppearanceEntity")
                         .WithMany("Goals")
-                        .HasForeignKey("AppearanceEntityId");
+                        .HasForeignKey("AppearanceEntityId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("AppearanceEntity");
                 });
@@ -223,7 +245,8 @@ namespace aiproject.Migrations
                 {
                     b.HasOne("aiproject.Entities.AppearanceEntity", "AppearanceEntity")
                         .WithMany("Ratings")
-                        .HasForeignKey("AppearanceEntityId");
+                        .HasForeignKey("AppearanceEntityId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("aiproject.Entities.UserEntity", "UserEntity")
                         .WithMany("Ratings")

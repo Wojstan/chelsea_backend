@@ -5,9 +5,9 @@ namespace aiproject.Dto
     public class GoalResponse
     {
         public int Id { get; set; }
-        
-        [JsonPropertyName("player")]
-        public PlayerGoalResponse PlayerGoalResponse { get; set; }
+
+        public int Appearance { get; set; }
+        public PlayerGoalResponse Player { get; set; }
     }
 
     public class PlayerGoalResponse

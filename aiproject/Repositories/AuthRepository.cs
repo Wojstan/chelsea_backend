@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using aiproject.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace aiproject.Repositories
 {
@@ -14,8 +15,7 @@ namespace aiproject.Repositories
 
         public UserEntity Register(UserEntity userEntity, string password)
         {
-            byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
 
             userEntity.PasswordHash = passwordHash;
             userEntity.PasswordSalt = passwordSalt;
@@ -28,16 +28,13 @@ namespace aiproject.Repositories
 
         public UserEntity Login(string username, string password)
         {
-            var user = _databaseContext.Set<UserEntity>().FirstOrDefault(userEntity => userEntity.Username == username);
+            var user = _databaseContext.Set<UserEntity>().Include(u=>u.RoleEntity).FirstOrDefault(userEntity => userEntity.Username == username);
             if (user == null)
             {
                 return null;
             }
 
-            if (!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
-                return null;
-
-            return user;
+            return !VerifyPassword(password, user.PasswordHash, user.PasswordSalt) ? null : user;
         }
 
         public bool UserExists(string username)
@@ -49,25 +46,16 @@ namespace aiproject.Repositories
 
         private bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != passwordHash[i])
-                        return false;
-                }
-            }
-            return true;
+            using var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt);
+            var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return !computedHash.Where((t, i) => t != passwordHash[i]).Any();
         }
         
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
+            using var hmac = new System.Security.Cryptography.HMACSHA512();
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
     }
 }

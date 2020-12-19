@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using aiproject;
@@ -9,9 +10,10 @@ using aiproject;
 namespace aiproject.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20201213180021_ticket")]
+    partial class ticket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,35 +163,6 @@ namespace aiproject.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("aiproject.Entities.TicketEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<int>("MatchId")
-                        .HasColumnType("integer");
-
-                    b.Property<char>("Row")
-                        .HasColumnType("character(1)");
-
-                    b.Property<int>("Seat")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("UserEntityId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserEntityId");
-
-                    b.ToTable("Tickets");
-                });
-
             modelBuilder.Entity("aiproject.Entities.UserEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -263,15 +236,6 @@ namespace aiproject.Migrations
                     b.Navigation("UserEntity");
                 });
 
-            modelBuilder.Entity("aiproject.Entities.TicketEntity", b =>
-                {
-                    b.HasOne("aiproject.Entities.UserEntity", "UserEntity")
-                        .WithMany("Tickets")
-                        .HasForeignKey("UserEntityId");
-
-                    b.Navigation("UserEntity");
-                });
-
             modelBuilder.Entity("aiproject.Entities.UserEntity", b =>
                 {
                     b.HasOne("aiproject.Entities.RoleEntity", "RoleEntity")
@@ -301,8 +265,6 @@ namespace aiproject.Migrations
             modelBuilder.Entity("aiproject.Entities.UserEntity", b =>
                 {
                     b.Navigation("Ratings");
-
-                    b.Navigation("Tickets");
                 });
 #pragma warning restore 612, 618
         }
