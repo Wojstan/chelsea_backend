@@ -15,7 +15,6 @@ namespace aiproject.Controllers
         private readonly AppearanceRepository _appearanceRepository;
         private readonly DatabaseContext _databaseContext;
         
-
         public AppearanceController(AppearanceRepository ratingRepository, DatabaseContext databaseContext)
         {
             _appearanceRepository = ratingRepository;

@@ -154,6 +154,29 @@ namespace aiproject.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Tickets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Seat = table.Column<int>(type: "integer", nullable: false),
+                    Row = table.Column<string>(type: "text", nullable: true),
+                    MatchId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    UserEntityId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tickets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tickets_Users_UserEntityId",
+                        column: x => x.UserEntityId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Appearances_MatchEntityId",
                 table: "Appearances",
@@ -180,6 +203,11 @@ namespace aiproject.Migrations
                 column: "UserEntityId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tickets_UserEntityId",
+                table: "Tickets",
+                column: "UserEntityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleEntityId",
                 table: "Users",
                 column: "RoleEntityId");
@@ -192,6 +220,9 @@ namespace aiproject.Migrations
 
             migrationBuilder.DropTable(
                 name: "Ratings");
+
+            migrationBuilder.DropTable(
+                name: "Tickets");
 
             migrationBuilder.DropTable(
                 name: "Appearances");

@@ -10,8 +10,8 @@ using aiproject;
 namespace aiproject.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201213180153_ticketdb")]
-    partial class ticketdb
+    [Migration("20210112181710_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -179,7 +179,15 @@ namespace aiproject.Migrations
                     b.Property<int>("Seat")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("UserEntityId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserEntityId");
 
                     b.ToTable("Tickets");
                 });
@@ -257,6 +265,15 @@ namespace aiproject.Migrations
                     b.Navigation("UserEntity");
                 });
 
+            modelBuilder.Entity("aiproject.Entities.TicketEntity", b =>
+                {
+                    b.HasOne("aiproject.Entities.UserEntity", "UserEntity")
+                        .WithMany("Tickets")
+                        .HasForeignKey("UserEntityId");
+
+                    b.Navigation("UserEntity");
+                });
+
             modelBuilder.Entity("aiproject.Entities.UserEntity", b =>
                 {
                     b.HasOne("aiproject.Entities.RoleEntity", "RoleEntity")
@@ -286,6 +303,8 @@ namespace aiproject.Migrations
             modelBuilder.Entity("aiproject.Entities.UserEntity", b =>
                 {
                     b.Navigation("Ratings");
+
+                    b.Navigation("Tickets");
                 });
 #pragma warning restore 612, 618
         }

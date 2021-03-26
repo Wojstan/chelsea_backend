@@ -19,7 +19,7 @@ namespace aiproject.Controllers
             _goalRepository = goalRepository;
             _databaseContext = databaseContext;
         }
-
+        
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<GoalResponse>> GetMatchGoals(int id)
         {

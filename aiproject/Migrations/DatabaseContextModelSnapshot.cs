@@ -171,8 +171,8 @@ namespace aiproject.Migrations
                     b.Property<int>("MatchId")
                         .HasColumnType("integer");
 
-                    b.Property<char>("Row")
-                        .HasColumnType("character(1)");
+                    b.Property<string>("Row")
+                        .HasColumnType("text");
 
                     b.Property<int>("Seat")
                         .HasColumnType("integer");
