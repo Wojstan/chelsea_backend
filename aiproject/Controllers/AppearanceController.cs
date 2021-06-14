@@ -9,7 +9,6 @@ namespace aiproject.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class AppearanceController : ControllerBase
     {
         private readonly AppearanceRepository _appearanceRepository;
